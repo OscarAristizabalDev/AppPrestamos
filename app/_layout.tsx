@@ -1,29 +1,53 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+export default function Layout() {
+    return (
+        <>
+            <Stack
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: '#f4511e',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}>
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+                <Stack.Screen
+                    name="(tabs)"
+                    options={{
+                        headerTitle: "Title",
+                        headerShown: true,
+                        // headerRight: () => (
+                        //     <Button
+                        //         onPress={() => alert('Button pressed!')}
+                        //         title="Press me"
+                        //         color="#000"
+                        //     />
+                        // ),
+                        // headerLeft: () => (
+                        //     <Button
+                        //         onPress={() => alert('Button pressed!')}
+                        //         title="Press me"
+                        //         color="#000"
+                        //     />
+                        // ),
+                        // headerSearchBarOptions: {
+                        //     placeholder: 'Search...',
+                        //     onChangeText: (event) => {
+                        //         console.log('Search text:', event.nativeEvent.text);
+                        //     },
+                        //     onCancelButtonPress: () => {
+                        //         console.log('Search canceled');
+                        //     },
+                        //     onSearchButtonPress: (event) => {
+                        //         console.log('Search submitted:', event.nativeEvent.text);
+                        //     },
+                        // },
+                    }} />
+            </Stack>
+        </>
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    );
 }

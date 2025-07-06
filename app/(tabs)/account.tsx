@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 
 
-export default function IndexScreen() {
+export default function AccountScreen() {
   return (
     <View style={styles.container}>
-      <Text>Index</Text>
+      <Text>Account</Text>
     </View>
   );
 }
