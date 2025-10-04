@@ -19,7 +19,7 @@ const LoanForm = (mode: CalculateLoanQuoteProps) => {
 
     const handleCalcultaLoanQuoteSubmit = async (data: LoanFormData): Promise<Quote[]> => {
         try {
-            const response = await fetch(urlIp, {
+            const response = await fetch(urlLocal, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
