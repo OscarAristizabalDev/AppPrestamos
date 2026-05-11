@@ -29,7 +29,6 @@ const useLogin = () => {
       login({ email, password }),
 
     onSuccess: async (data) => {
-      console.log("login success");
       setAccessToken(data.accessToken);
       await SecureStore.setItemAsync("accessToken", data.accessToken);
       await SecureStore.setItemAsync("refreshToken", data.refreshToken);

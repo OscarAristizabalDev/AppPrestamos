@@ -34,7 +34,6 @@ api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
   config.headers.setContentType("application/json");
   if (!config.url?.includes("/auth/login") && token) {
-    console.info("Adding Authorization header");
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -43,7 +42,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.info("There was an error, code: ", error.response?.status);
     const originalRequest = error.config;
     const refreshToken = await SecureStore.getItemAsync("refreshToken");
     if (

@@ -1,4 +1,4 @@
-import LoanForm from "@/src/features/loans/components/LoanForm";
+import LoanForm from "@features/loans/components/LoanForm";
 
 const CreateLoanScreen = () => {
   const handleCreate = (data: any) => {

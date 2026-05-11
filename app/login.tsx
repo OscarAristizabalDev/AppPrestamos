@@ -31,7 +31,6 @@ export default function LoginScreen() {
   const { mutate, isPending } = useLogin();
 
   const onSubmit = (data: AuthRequest) => {
-    console.log("login clicked");
     mutate(data);
   };
 
