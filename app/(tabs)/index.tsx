@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { SearchableDropdown } from "@/src/components/ui/SearchableDropdown";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchClients } from "@/src/features/clients/hooks/useSearchClient";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -12,6 +12,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SimpleDropdown } from "@/src/components/ui/Dropdown";
 import { useLogout } from "@/src/hooks/useLogout";
 import { useDocTypes } from "@/src/features/clients/hooks/useDocTypes";
+import {
+  ProductFormData,
+  ProductSchema,
+} from "@/src/features/products/schemas/product.schema";
+import { useSearchProducts } from "@/src/features/products/hooks/useSearchProducts";
 
 type DocType = { id: string; label: string };
 
@@ -22,24 +27,34 @@ function DocTypesLoader() {
 
 export default function IndexScreen() {
   const { handleLogout } = useLogout();
+  // const {
+  //   control,
+  //   handleSubmit,
+  //   formState: { errors, isValid },
+  // } = useForm<Client>({
+  //   resolver: zodResolver(ClientSchema),
+  //   mode: "onChange",
+  // });
+
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<Client>({
-    resolver: zodResolver(ClientSchema),
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(ProductSchema),
     mode: "onChange",
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const { data, isLoading } = useSearchClients(searchQuery);
+  const { data: clientsData, isLoading: isLoadingClients } =
+    useSearchClients(searchQuery);
+  const { data: productsData, isLoading: isLoadingProducts } =
+    useSearchProducts(searchQuery);
+
   const [selectedDocType, setSelectedDocType] = useState<DocType | null>(null);
 
-  const clients = data?.data ?? [];
-  console.log(
-    "[Index Tab]Clientes recibidos para SearchableDropdown...",
-    clients,
-  );
+  const clients = clientsData?.data ?? [];
+  const products = productsData?.data ?? [];
 
   return (
     <View style={styles.container}>
@@ -53,20 +68,37 @@ export default function IndexScreen() {
           control={control}
           name="id"
           render={({ field: { onChange, onBlur, value } }) => (
+            // <SearchableDropdown
+            //   data={clients}
+            //   labelKey="fullName"
+            //   valueKey="id"
+            //   value={clients.find((c) => c.id === value) || null}
+            //   label="Cliente"
+            //   onSelect={(client) => onChange(client.id)}
+            //   placeholder="Buscar cliente..."
+            //   searchPlaceholder="Buscar..."
+            //   icon="account"
+            //   isSaving={isLoading}
+            //   searchable={true}
+            //   onSearchChange={setSearchQuery}
+            //   searchLoading={isLoading}
+            // />
             <SearchableDropdown
-              data={clients}
-              labelKey="fullName"
+              data={products}
+              labelKey="name"
               valueKey="id"
-              value={clients.find((c) => c.id === value) || null}
-              label="Cliente"
-              onSelect={(client) => onChange(client.id)}
-              placeholder="Buscar cliente..."
+              value={
+                products.find((c: ProductFormData) => c.id === value) || null
+              }
+              label="Productos"
+              onSelect={(product) => onChange(product.id)}
+              placeholder="Buscar producto..."
               searchPlaceholder="Buscar..."
-              icon="account"
-              isSaving={isLoading}
+              icon="package-variant"
+              isSaving={isLoadingProducts}
               searchable={true}
               onSearchChange={setSearchQuery}
-              searchLoading={isLoading}
+              searchLoading={isLoadingProducts}
             />
           )}
         />
